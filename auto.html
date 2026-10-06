@@ -1,0 +1,4205 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>VELOCITY — Світ автомобілів</title>
+
+  <meta
+    name="description"
+    content="VELOCITY — сучасний автомобільний портал. Автомобілі, огляди, характеристики, порівняння, новини та конфігуратор."
+  >
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://images.unsplash.com">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    :root {
+      --bg: #08090b;
+      --bg-soft: #101216;
+      --card: #14171c;
+      --card-2: #1a1e24;
+      --text: #f5f7fa;
+      --muted: #9299a5;
+      --line: rgba(255,255,255,.09);
+      --accent: #ff3b30;
+      --accent-2: #ff6a3d;
+      --green: #34d399;
+      --white: #fff;
+      --shadow: 0 25px 80px rgba(0,0,0,.35);
+      --radius: 24px;
+      --container: 1400px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    body.no-scroll {
+      overflow: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    ::selection {
+      background: var(--accent);
+      color: white;
+    }
+
+    /* =========================
+       SCROLLBAR
+    ========================= */
+
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #08090b;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #292d34;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent);
+    }
+
+    /* =========================
+       GLOBAL
+    ========================= */
+
+    .container {
+      width: min(var(--container), calc(100% - 48px));
+      margin: 0 auto;
+    }
+
+    .section {
+      padding: 120px 0;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 30px;
+      margin-bottom: 55px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 30px;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    .section-title {
+      font-size: clamp(38px, 5vw, 74px);
+      line-height: .95;
+      letter-spacing: -.055em;
+      max-width: 800px;
+    }
+
+    .section-description {
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 560px;
+      font-size: 15px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 15px 23px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: .3s ease;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #ff554b;
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(255,59,48,.25);
+    }
+
+    .btn-dark {
+      background: rgba(255,255,255,.08);
+      color: white;
+      border: 1px solid var(--line);
+    }
+
+    .btn-dark:hover {
+      background: rgba(255,255,255,.14);
+      transform: translateY(-3px);
+    }
+
+    .btn-large {
+      padding: 18px 28px;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      transition: .35s ease;
+      border-bottom: 1px solid transparent;
+    }
+
+    header.scrolled {
+      background: rgba(8,9,11,.88);
+      backdrop-filter: blur(20px);
+      border-color: var(--line);
+    }
+
+    .navbar {
+      height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 25px;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: -.05em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #ff835e);
+      position: relative;
+      box-shadow: 0 0 30px rgba(255,59,48,.3);
+    }
+
+    .logo-mark::before {
+      content: "";
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      border: 3px solid white;
+      border-radius: 50%;
+      top: 7px;
+      left: 7px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav a {
+      font-size: 13px;
+      font-weight: 700;
+      color: #c7cbd1;
+      transition: .25s ease;
+      position: relative;
+    }
+
+    .nav a:hover {
+      color: white;
+    }
+
+    .nav a::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      bottom: -9px;
+      left: 0;
+      transition: .25s;
+    }
+
+    .nav a:hover::after {
+      width: 100%;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 17px;
+      transition: .25s;
+    }
+
+    .icon-btn:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .menu-btn {
+      display: none;
+    }
+
+    /* =========================
+       HERO
+    ========================= */
+
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(5,6,8,.97) 0%, rgba(5,6,8,.72) 40%, rgba(5,6,8,.2) 75%, rgba(5,6,8,.55) 100%),
+        url("https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=2400&q=90")
+        center/cover;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 70% 30%, rgba(255,59,48,.13), transparent 35%),
+        linear-gradient(0deg, var(--bg) 0%, transparent 30%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding-top: 100px;
+      max-width: 900px;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.13);
+      padding: 9px 13px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      backdrop-filter: blur(15px);
+    }
+
+    .hero-tag span {
+      width: 7px;
+      height: 7px;
+      background: #40e69b;
+      border-radius: 50%;
+      box-shadow: 0 0 15px #40e69b;
+    }
+
+    .hero h1 {
+      font-size: clamp(62px, 9vw, 150px);
+      line-height: .82;
+      letter-spacing: -.08em;
+      font-weight: 900;
+      max-width: 1000px;
+    }
+
+    .hero h1 span {
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255,255,255,.7);
+    }
+
+    .hero-text {
+      max-width: 600px;
+      color: #b3b8c1;
+      font-size: 17px;
+      line-height: 1.75;
+      margin: 30px 0;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .hero-bottom {
+      position: absolute;
+      left: 0;
+      bottom: 45px;
+      width: 100%;
+      z-index: 3;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      max-width: 800px;
+      margin-left: auto;
+      background: rgba(12,13,16,.72);
+      backdrop-filter: blur(18px);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+    }
+
+    .hero-stat {
+      padding: 20px 24px;
+      border-right: 1px solid var(--line);
+    }
+
+    .hero-stat:last-child {
+      border: 0;
+    }
+
+    .hero-stat strong {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 5px;
+    }
+
+    .hero-stat span {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+
+    /* =========================
+       BRANDS
+    ========================= */
+
+    .brands {
+      padding: 35px 0;
+      border-bottom: 1px solid var(--line);
+      border-top: 1px solid var(--line);
+      background: #0b0d10;
+    }
+
+    .brand-list {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+    }
+
+    .brand {
+      border: 1px solid var(--line);
+      min-height: 90px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      color: #858b95;
+      font-weight: 900;
+      font-size: 18px;
+      transition: .3s;
+      background: rgba(255,255,255,.015);
+    }
+
+    .brand:hover {
+      color: white;
+      background: rgba(255,255,255,.05);
+      border-color: rgba(255,255,255,.2);
+      transform: translateY(-4px);
+    }
+
+    /* =========================
+       CATEGORIES
+    ========================= */
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .category-card {
+      min-height: 310px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--line);
+      background: var(--card);
+      cursor: pointer;
+    }
+
+    .category-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      inset: 0;
+      transition: .7s ease;
+      opacity: .65;
+    }
+
+    .category-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(0deg, rgba(0,0,0,.9), transparent 65%);
+    }
+
+    .category-card:hover img {
+      transform: scale(1.08);
+      opacity: .85;
+    }
+
+    .category-info {
+      position: absolute;
+      z-index: 2;
+      left: 24px;
+      right: 24px;
+      bottom: 24px;
+    }
+
+    .category-info h3 {
+      font-size: 26px;
+      margin-bottom: 7px;
+    }
+
+    .category-info p {
+      color: #b1b5bc;
+      font-size: 13px;
+    }
+
+    /* =========================
+       CATALOG
+    ========================= */
+
+    .catalog {
+      background: #0b0d10;
+    }
+
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 35px;
+    }
+
+    .filter-btn {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: #aeb3bb;
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 13px;
+      transition: .25s;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: white;
+      color: #08090b;
+      border-color: white;
+    }
+
+    .cars-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .car-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: .35s ease;
+      position: relative;
+    }
+
+    .car-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(255,255,255,.16);
+      box-shadow: var(--shadow);
+    }
+
+    .car-image {
+      height: 300px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .car-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: .6s;
+    }
+
+    .car-card:hover .car-image img {
+      transform: scale(1.06);
+    }
+
+    .car-badge {
+      position: absolute;
+      left: 18px;
+      top: 18px;
+      background: var(--accent);
+      color: white;
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .favorite {
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.15);
+      background: rgba(0,0,0,.45);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      backdrop-filter: blur(10px);
+      transition: .25s;
+    }
+
+    .favorite.active {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .car-content {
+      padding: 24px;
+    }
+
+    .car-top {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .car-brand {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 800;
+      letter-spacing: .12em;
+    }
+
+    .car-name {
+      font-size: 25px;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    .car-price {
+      font-weight: 900;
+      font-size: 18px;
+      white-space: nowrap;
+    }
+
+    .car-specs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 16px 0;
+      margin-bottom: 18px;
+    }
+
+    .spec {
+      text-align: center;
+      border-right: 1px solid var(--line);
+    }
+
+    .spec:last-child {
+      border: 0;
+    }
+
+    .spec strong {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .spec span {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .car-actions {
+      display: grid;
+      grid-template-columns: 1fr 45px;
+      gap: 8px;
+    }
+
+    /* =========================
+       FEATURED
+    ========================= */
+
+    .featured-wrap {
+      display: grid;
+      grid-template-columns: 1.3fr .7fr;
+      min-height: 650px;
+      border-radius: 32px;
+      overflow: hidden;
+      background: #111419;
+      border: 1px solid var(--line);
+    }
+
+    .featured-image {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .featured-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .featured-image::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent 40%, #111419 100%);
+    }
+
+    .featured-content {
+      padding: 70px 55px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .featured-content h2 {
+      font-size: clamp(42px, 5vw, 72px);
+      letter-spacing: -.06em;
+      line-height: .95;
+      margin-bottom: 25px;
+    }
+
+    .featured-content p {
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 30px;
+    }
+
+    .feature-list {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 35px;
+    }
+
+    .feature-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--line);
+      color: #d4d7dc;
+      font-size: 14px;
+    }
+
+    .feature-item span {
+      color: var(--muted);
+    }
+
+    /* =========================
+       CONFIGURATOR
+    ========================= */
+
+    .configurator {
+      background:
+        radial-gradient(circle at 75% 30%, rgba(255,59,48,.13), transparent 35%),
+        #0d0f13;
+    }
+
+    .configurator-grid {
+      display: grid;
+      grid-template-columns: 1.4fr .6fr;
+      gap: 20px;
+    }
+
+    .config-preview {
+      min-height: 650px;
+      border-radius: 30px;
+      border: 1px solid var(--line);
+      overflow: hidden;
+      position: relative;
+      background:
+        linear-gradient(0deg, rgba(0,0,0,.8), transparent 55%),
+        url("https://images.unsplash.com/photo-1542282088-fe8426682b8f?auto=format&fit=crop&w=1800&q=85")
+        center/cover;
+    }
+
+    .config-title {
+      position: absolute;
+      left: 35px;
+      top: 35px;
+    }
+
+    .config-title span {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+    }
+
+    .config-title h3 {
+      font-size: 36px;
+      margin-top: 5px;
+    }
+
+    .config-price {
+      position: absolute;
+      bottom: 30px;
+      left: 35px;
+    }
+
+    .config-price small {
+      display: block;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .config-price strong {
+      font-size: 40px;
+    }
+
+    .config-panel {
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      background: var(--card);
+      padding: 30px;
+    }
+
+    .config-panel h3 {
+      font-size: 25px;
+      margin-bottom: 25px;
+    }
+
+    .config-option {
+      margin-bottom: 25px;
+    }
+
+    .config-option > label {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-bottom: 12px;
+    }
+
+    .option-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .option {
+      padding: 13px 8px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      color: #bbbfc6;
+      border-radius: 12px;
+      font-size: 11px;
+      text-align: center;
+      transition: .25s;
+    }
+
+    .option:hover,
+    .option.active {
+      border-color: var(--accent);
+      background: rgba(255,59,48,.08);
+      color: white;
+    }
+
+    .color-options {
+      display: flex;
+      gap: 10px;
+    }
+
+    .color {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      outline: 1px solid var(--line);
+      transition: .2s;
+    }
+
+    .color.active {
+      border-color: white;
+      outline-color: var(--accent);
+      transform: scale(1.08);
+    }
+
+    .black { background: #111; }
+    .white { background: #eee; }
+    .red { background: #c62520; }
+    .blue { background: #173b75; }
+    .silver { background: #9b9fa7; }
+
+    /* =========================
+       COMPARISON
+    ========================= */
+
+    .compare-box {
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      overflow: hidden;
+      background: var(--card);
+    }
+
+    .compare-header {
+      display: grid;
+      grid-template-columns: 180px repeat(3, 1fr);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .compare-header > div {
+      padding: 25px;
+      border-right: 1px solid var(--line);
+    }
+
+    .compare-header > div:last-child {
+      border: 0;
+    }
+
+    .compare-car img {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 13px;
+    }
+
+    .compare-car h4 {
+      font-size: 16px;
+    }
+
+    .compare-row {
+      display: grid;
+      grid-template-columns: 180px repeat(3, 1fr);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .compare-row:last-child {
+      border-bottom: 0;
+    }
+
+    .compare-row > div {
+      padding: 18px 25px;
+      border-right: 1px solid var(--line);
+      color: #d7dae0;
+      font-size: 13px;
+    }
+
+    .compare-row > div:first-child {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .compare-row > div:last-child {
+      border: 0;
+    }
+
+    /* =========================
+       NEWS
+    ========================= */
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: 1.4fr .6fr .6fr;
+      gap: 18px;
+    }
+
+    .news-card {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      overflow: hidden;
+      background: var(--card);
+      transition: .3s;
+    }
+
+    .news-card:hover {
+      transform: translateY(-7px);
+      box-shadow: var(--shadow);
+    }
+
+    .news-image {
+      height: 250px;
+      overflow: hidden;
+    }
+
+    .news-card.large .news-image {
+      height: 390px;
+    }
+
+    .news-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: .6s;
+    }
+
+    .news-card:hover img {
+      transform: scale(1.06);
+    }
+
+    .news-content {
+      padding: 23px;
+    }
+
+    .news-meta {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 11px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .news-content h3 {
+      font-size: 22px;
+      line-height: 1.15;
+    }
+
+    .news-card.large .news-content h3 {
+      font-size: 32px;
+    }
+
+    .news-content p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+      margin-top: 12px;
+    }
+
+    /* =========================
+       NUMBERS
+    ========================= */
+
+    .numbers {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: #0b0d10;
+    }
+
+    .numbers-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .number-item {
+      padding: 55px 30px;
+      text-align: center;
+      border-right: 1px solid var(--line);
+    }
+
+    .number-item:last-child {
+      border: 0;
+    }
+
+    .number-item strong {
+      display: block;
+      font-size: clamp(42px, 5vw, 70px);
+      letter-spacing: -.06em;
+    }
+
+    .number-item span {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-size: 10px;
+    }
+
+    /* =========================
+       REVIEWS
+    ========================= */
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .review {
+      padding: 30px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--card);
+    }
+
+    .stars {
+      color: #ffbf47;
+      letter-spacing: 4px;
+      margin-bottom: 20px;
+    }
+
+    .review p {
+      color: #d0d4da;
+      line-height: 1.8;
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    .review-user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .review-user strong {
+      display: block;
+      font-size: 13px;
+    }
+
+    .review-user span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    /* =========================
+       FAQ
+    ========================= */
+
+    .faq-wrap {
+      max-width: 950px;
+      margin: auto;
+    }
+
+    .faq {
+      border-top: 1px solid var(--line);
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .faq-question {
+      width: 100%;
+      background: transparent;
+      border: 0;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 25px 0;
+      text-align: left;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .faq-icon {
+      width: 35px;
+      height: 35px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      transition: .3s;
+      flex-shrink: 0;
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: .4s ease;
+    }
+
+    .faq-answer p {
+      color: var(--muted);
+      line-height: 1.8;
+      padding-bottom: 25px;
+      max-width: 800px;
+    }
+
+    .faq-item.open .faq-answer {
+      max-height: 300px;
+    }
+
+    .faq-item.open .faq-icon {
+      transform: rotate(45deg);
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* =========================
+       CTA
+    ========================= */
+
+    .cta {
+      padding: 100px 0;
+    }
+
+    .cta-box {
+      min-height: 480px;
+      border-radius: 35px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 70px;
+      background:
+        linear-gradient(90deg, rgba(5,6,8,.96), rgba(5,6,8,.45)),
+        url("https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=2200&q=85")
+        center/cover;
+    }
+
+    .cta-content {
+      max-width: 700px;
+    }
+
+    .cta-content h2 {
+      font-size: clamp(45px, 6vw, 85px);
+      line-height: .9;
+      letter-spacing: -.07em;
+      margin-bottom: 25px;
+    }
+
+    .cta-content p {
+      color: #b7bbc2;
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    /* =========================
+       CONTACT
+    ========================= */
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: .8fr 1.2fr;
+      gap: 20px;
+    }
+
+    .contact-info,
+    .contact-form {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 40px;
+    }
+
+    .contact-info h3,
+    .contact-form h3 {
+      font-size: 28px;
+      margin-bottom: 15px;
+    }
+
+    .contact-info p {
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 30px;
+    }
+
+    .contact-item {
+      padding: 17px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .contact-item span {
+      color: var(--muted);
+      font-size: 11px;
+      display: block;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+
+    .contact-item strong {
+      font-size: 14px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 13px;
+    }
+
+    .field {
+      margin-bottom: 13px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      background: #0e1014;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: white;
+      padding: 14px 15px;
+      outline: none;
+      transition: .25s;
+    }
+
+    .field textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--accent);
+    }
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    footer {
+      border-top: 1px solid var(--line);
+      background: #07080a;
+      padding: 70px 0 25px;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.5fr repeat(3, 1fr);
+      gap: 50px;
+      padding-bottom: 60px;
+    }
+
+    .footer-brand p {
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 360px;
+      margin-top: 20px;
+      font-size: 13px;
+    }
+
+    .footer-col h4 {
+      margin-bottom: 18px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+
+    .footer-col a {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 12px;
+      transition: .2s;
+    }
+
+    .footer-col a:hover {
+      color: white;
+      transform: translateX(3px);
+    }
+
+    .footer-bottom {
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      color: #686e78;
+      font-size: 11px;
+    }
+
+    /* =========================
+       MODAL
+    ========================= */
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 3000;
+      background: rgba(0,0,0,.75);
+      backdrop-filter: blur(12px);
+      display: none;
+      place-items: center;
+      padding: 20px;
+    }
+
+    .modal.show {
+      display: grid;
+    }
+
+    .modal-box {
+      width: min(950px, 100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      border-radius: 28px;
+      background: #12151a;
+      border: 1px solid var(--line);
+      box-shadow: 0 40px 100px rgba(0,0,0,.6);
+      position: relative;
+      animation: modalIn .3s ease;
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(.97);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.15);
+      background: rgba(0,0,0,.5);
+      color: white;
+      z-index: 3;
+      font-size: 18px;
+    }
+
+    .modal-image {
+      height: 350px;
+      overflow: hidden;
+    }
+
+    .modal-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .modal-body {
+      padding: 35px;
+    }
+
+    .modal-body h2 {
+      font-size: 42px;
+      letter-spacing: -.05em;
+      margin-bottom: 10px;
+    }
+
+    .modal-body > p {
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 25px;
+    }
+
+    .modal-specs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .modal-spec {
+      border: 1px solid var(--line);
+      padding: 18px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.025);
+    }
+
+    .modal-spec span {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+
+    .modal-spec strong {
+      font-size: 15px;
+    }
+
+    /* =========================
+       TOAST
+    ========================= */
+
+    .toast {
+      position: fixed;
+      right: 25px;
+      bottom: 25px;
+      background: #171a20;
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--accent);
+      color: white;
+      padding: 16px 20px;
+      border-radius: 12px;
+      z-index: 5000;
+      transform: translateY(120px);
+      opacity: 0;
+      transition: .35s;
+      box-shadow: var(--shadow);
+      max-width: 350px;
+      font-size: 13px;
+    }
+
+    .toast.show {
+      transform: none;
+      opacity: 1;
+    }
+
+    /* =========================
+       REVEAL
+    ========================= */
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: .8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 1100px) {
+      .nav {
+        gap: 18px;
+      }
+
+      .hero h1 {
+        font-size: 90px;
+      }
+
+      .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .cars-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .featured-wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .featured-image {
+        min-height: 450px;
+      }
+
+      .configurator-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .news-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .news-card.large {
+        grid-column: 1 / -1;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-top {
+        grid-template-columns: 1.5fr 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 800px) {
+      .container {
+        width: min(100% - 28px, var(--container));
+      }
+
+      .section {
+        padding: 80px 0;
+      }
+
+      .section-header {
+        display: block;
+      }
+
+      .section-description {
+        margin-top: 18px;
+      }
+
+      .nav {
+        position: fixed;
+        top: 82px;
+        left: 14px;
+        right: 14px;
+        background: rgba(15,17,21,.97);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: 22px;
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .nav.open {
+        display: flex;
+      }
+
+      .nav a {
+        padding: 13px;
+      }
+
+      .menu-btn {
+        display: grid;
+      }
+
+      .header-actions .btn {
+        display: none;
+      }
+
+      .hero {
+        min-height: 850px;
+      }
+
+      .hero h1 {
+        font-size: clamp(56px, 15vw, 90px);
+      }
+
+      .hero-text {
+        font-size: 14px;
+      }
+
+      .hero-bottom {
+        bottom: 20px;
+      }
+
+      .hero-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero-stat:nth-child(2) {
+        border-right: 0;
+      }
+
+      .brand-list {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .category-grid,
+      .cars-grid,
+      .reviews-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .news-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .news-card.large {
+        grid-column: auto;
+      }
+
+      .numbers-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .number-item:nth-child(2) {
+        border-right: 0;
+      }
+
+      .number-item:nth-child(-n+2) {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .compare-box {
+        overflow-x: auto;
+      }
+
+      .compare-header,
+      .compare-row {
+        min-width: 850px;
+      }
+
+      .cta-box {
+        padding: 40px 25px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .field.full {
+        grid-column: auto;
+      }
+
+      .footer-top {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .footer-brand {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .header-actions .icon-btn {
+        display: none;
+      }
+
+      .hero-buttons {
+        display: grid;
+      }
+
+      .hero-buttons .btn {
+        width: 100%;
+      }
+
+      .hero-stats {
+        max-width: 100%;
+      }
+
+      .hero-stat {
+        padding: 15px;
+      }
+
+      .brand-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .category-card {
+        min-height: 240px;
+      }
+
+      .car-image {
+        height: 240px;
+      }
+
+      .featured-content {
+        padding: 40px 25px;
+      }
+
+      .config-preview {
+        min-height: 500px;
+      }
+
+      .modal-specs {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .modal-body {
+        padding: 25px;
+      }
+
+      .modal-body h2 {
+        font-size: 32px;
+      }
+
+      .footer-top {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-brand {
+        grid-column: auto;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header id="header">
+  <div class="container navbar">
+
+    <a href="#home" class="logo">
+      <span class="logo-mark"></span>
+      VELOCITY
+    </a>
+
+    <nav class="nav" id="nav">
+      <a href="#home">Головна</a>
+      <a href="#models">Автомобілі</a>
+      <a href="#featured">Огляд</a>
+      <a href="#configurator">Конфігуратор</a>
+      <a href="#compare">Порівняння</a>
+      <a href="#news">Новини</a>
+      <a href="#contact">Контакти</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="icon-btn" onclick="showToast('Пошук автомобілів скоро відкриється')">⌕</button>
+
+      <button
+        class="icon-btn"
+        onclick="showToast('У вибраному поки немає автомобілів')"
+      >
+        ♡
+      </button>
+
+      <a href="#contact" class="btn btn-primary">Тест-драйв</a>
+
+      <button class="icon-btn menu-btn" id="menuBtn">☰</button>
+    </div>
+
+  </div>
+</header>
+
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<main>
+
+<section class="hero" id="home">
+
+  <div class="container">
+
+    <div class="hero-content reveal">
+
+      <div class="hero-tag">
+        <span></span>
+        Нове покоління автомобільного світу
+      </div>
+
+      <h1>
+        DRIVE<br>
+        <span>YOUR</span><br>
+        FUTURE.
+      </h1>
+
+      <p class="hero-text">
+        Відкрий світ автомобілів нового покоління.
+        Порівнюй моделі, вивчай характеристики,
+        знаходь свій стиль і створюй автомобіль,
+        який відповідає саме тобі.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="#models" class="btn btn-primary btn-large">
+          Переглянути автомобілі →
+        </a>
+
+        <a href="#configurator" class="btn btn-dark btn-large">
+          Створити свій автомобіль
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="hero-bottom">
+
+    <div class="container">
+
+      <div class="hero-stats">
+
+        <div class="hero-stat">
+          <strong>240+</strong>
+          <span>моделей</span>
+        </div>
+
+        <div class="hero-stat">
+          <strong>48</strong>
+          <span>брендів</span>
+        </div>
+
+        <div class="hero-stat">
+          <strong>12K+</strong>
+          <span>оглядів</span>
+        </div>
+
+        <div class="hero-stat">
+          <strong>4.9/5</strong>
+          <span>рейтинг</span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     BRANDS
+========================================================= -->
+
+<section class="brands">
+
+  <div class="container">
+
+    <div class="brand-list">
+
+      <div class="brand">PORSCHE</div>
+      <div class="brand">BMW</div>
+      <div class="brand">AUDI</div>
+      <div class="brand">MERCEDES</div>
+      <div class="brand">TESLA</div>
+      <div class="brand">FERRARI</div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     CATEGORIES
+========================================================= -->
+
+<section class="section">
+
+  <div class="container">
+
+    <div class="section-header reveal">
+
+      <div>
+        <div class="eyebrow">Explore</div>
+
+        <h2 class="section-title">
+          Знайди автомобіль<br>
+          під свій характер.
+        </h2>
+      </div>
+
+      <p class="section-description">
+        Спортивні автомобілі для емоцій.
+        Електромобілі для майбутнього.
+        Позашляховики для пригод.
+        Преміальні моделі для тих, хто не звик
+        до компромісів.
+      </p>
+
+    </div>
+
+
+    <div class="category-grid">
+
+      <div class="category-card reveal" onclick="filterCars('sport')">
+
+        <img
+          src="https://images.unsplash.com/photo-1544829099-b9a0c07fad1a?auto=format&fit=crop&w=1200&q=80"
+          alt="Спортивний автомобіль"
+        >
+
+        <div class="category-info">
+          <h3>Performance</h3>
+          <p>Швидкість. Потужність. Емоції.</p>
+        </div>
+
+      </div>
+
+
+      <div class="category-card reveal" onclick="filterCars('electric')">
+
+        <img
+          src="https://images.unsplash.com/photo-1619767886558-efdc259cde1a?auto=format&fit=crop&w=1200&q=80"
+          alt="Електромобіль"
+        >
+
+        <div class="category-info">
+          <h3>Electric</h3>
+          <p>Майбутнє вже сьогодні.</p>
+        </div>
+
+      </div>
+
+
+      <div class="category-card reveal" onclick="filterCars('suv')">
+
+        <img
+          src="https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=1200&q=80"
+          alt="SUV"
+        >
+
+        <div class="category-info">
+          <h3>SUV</h3>
+          <p>Свобода без обмежень.</p>
+        </div>
+
+      </div>
+
+
+      <div class="category-card reveal" onclick="filterCars('luxury')">
+
+        <img
+          src="https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1200&q=80"
+          alt="Преміальний автомобіль"
+        >
+
+        <div class="category-info">
+          <h3>Luxury</h3>
+          <p>Розкіш у кожній деталі.</p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     CATALOG
+========================================================= -->
+
+<section class="section catalog" id="models">
+
+  <div class="container">
+
+    <div class="section-header reveal">
+
+      <div>
+        <div class="eyebrow">Car collection</div>
+
+        <h2 class="section-title">
+          Автомобілі,<br>
+          які варто знати.
+        </h2>
+      </div>
+
+      <p class="section-description">
+        Переглядай актуальні моделі,
+        порівнюй характеристики та відкривай
+        нових фаворитів.
+      </p>
+
+    </div>
+
+
+    <div class="filter-bar">
+
+      <button class="filter-btn active" onclick="filterCars('all', this)">
+        Усі
+      </button>
+
+      <button class="filter-btn" onclick="filterCars('sport', this)">
+        Спорт
+      </button>
+
+      <button class="filter-btn" onclick="filterCars('electric', this)">
+        Електро
+      </button>
+
+      <button class="filter-btn" onclick="filterCars('suv', this)">
+        SUV
+      </button>
+
+      <button class="filter-btn" onclick="filterCars('luxury', this)">
+        Luxury
+      </button>
+
+    </div>
+
+
+    <div class="cars-grid" id="carsGrid">
+
+      <!-- CAR 1 -->
+
+      <article class="car-card reveal" data-category="sport">
+
+        <div class="car-image">
+
+          <img
+            src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=85"
+            alt="Porsche 911"
+          >
+
+          <span class="car-badge">Editor's choice</span>
+
+          <button
+            class="favorite"
+            onclick="toggleFavorite(this)"
+          >
+            ♡
+          </button>
+
+        </div>
+
+        <div class="car-content">
+
+          <div class="car-top">
+
+            <div>
+              <div class="car-brand">Porsche</div>
+              <div class="car-name">911 Carrera</div>
+            </div>
+
+            <div class="car-price">$128K</div>
+
+          </div>
+
+          <div class="car-specs">
+
+            <div class="spec">
+              <strong>3.0L</strong>
+              <span>Engine</span>
+            </div>
+
+            <div class="spec">
+              <strong>443 HP</strong>
+              <span>Power</span>
+            </div>
+
+            <div class="spec">
+              <strong>3.7s</strong>
+              <span>0–100</span>
+            </div>
+
+          </div>
+
+          <div class="car-actions">
+
+            <button
+              class="btn btn-primary"
+              onclick="openCar(
+                'Porsche 911 Carrera',
+                'Porsche',
+                '$128,000',
+                'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1800&q=90',
+                '3.0L Turbo',
+                '443 HP',
+                '3.7 сек',
+                '293 км/год'
+              )"
+            >
+              Детальніше →
+            </button>
+
+            <button
+              class="icon-btn"
+              onclick="showToast('Porsche 911 додано до порівняння')"
+            >
+              ⇄
+            </button>
+
+          </div>
+
+        </div>
+
+      </article>
+
+
+      <!-- CAR 2 -->
+
+      <article class="car-card reveal" data-category="electric">
+
+        <div class="car-image">
+
+          <img
+            src="https://images.unsplash.com/photo-1560958089-b8a1929cea89?auto=format&fit=crop&w=1200&q=85"
+            alt="Tesla Model S"
+          >
+
+          <span class="car-badge">Electric</span>
+
+          <button
+            class="favorite"
+            onclick="toggleFavorite(this)"
+          >
+            ♡
+          </button>
+
+        </div>
+
+        <div class="car-content">
+
+          <div class="car-top">
+
+            <div>
+              <div class="car-brand">Tesla</div>
+              <div class="car-name">Model S</div>
+            </div>
+
+            <div class="car-price">$89K</div>
+
+          </div>
+
+          <div class="car-specs">
+
+            <div class="spec">
+              <strong>100 kWh</strong>
+              <span>Battery</span>
+            </div>
+
+            <div class="spec">
+              <strong>670 HP</strong>
+              <span>Power</span>
+            </div>
+
+            <div class="spec">
+              <strong>3.2s</strong>
+              <span>0–100</span>
+            </div>
+
+          </div>
+
+          <div class="car-actions">
+
+            <button
+              class="btn btn-primary"
+              onclick="openCar(
+                'Tesla Model S',
+                'Tesla',
+                '$89,000',
+                'https://images.unsplash.com/photo-1560958089-b8a1929cea89?auto=format&fit=crop&w=1800&q=90',
+                '100 kWh',
+                '670 HP',
+                '3.2 сек',
+                '322 км/год'
+              )"
+            >
+              Детальніше →
+            </button>
+
+            <button
+              class="icon-btn"
+              onclick="showToast('Tesla Model S додано до порівняння')"
+            >
+              ⇄
+            </button>
+
+          </div>
+
+        </div>
+
+      </article>
+
+
+      <!-- CAR 3 -->
+
+      <article class="car-card reveal" data-category="luxury">
+
+        <div class="car-image">
+
+          <img
+            src="https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1200&q=85"
+            alt="BMW M4"
+          >
+
+          <span class="car-badge">New</span>
+
+          <button
+            class="favorite"
+            onclick="toggleFavorite(this)"
+          >
+            ♡
+          </button>
+
+        </div>
+
+        <div class="car-content">
+
+          <div class="car-top">
+
+            <div>
+              <div class="car-brand">BMW</div>
+              <div class="car-name">M4 Competition</div>
+            </div>
+
+            <div class="car-price">$86K</div>
+
+          </div>
+
+          <div class="car-specs">
+
+            <div class="spec">
+              <strong>3.0L</strong>
+              <span>Engine</span>
+            </div>
+
+            <div class="spec">
+              <strong>503 HP</strong>
+              <span>Power</span>
+            </div>
+
+            <div class="spec">
+              <strong>3.8s</strong>
+              <span>0–100</span>
+            </div>
+
+          </div>
+
+          <div class="car-actions">
+
+            <button
+              class="btn btn-primary"
+              onclick="openCar(
+                'BMW M4 Competition',
+                'BMW',
+                '$86,000',
+                'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1800&q=90',
+                '3.0L Twin Turbo',
+                '503 HP',
+                '3.8 сек',
+                '290 км/год'
+              )"
+            >
+              Детальніше →
+            </button>
+
+            <button
+              class="icon-btn"
+              onclick="showToast('BMW M4 додано до порівняння')"
+            >
+              ⇄
+            </button>
+
+          </div>
+
+        </div>
+
+      </article>
+
+
+      <!-- CAR 4 -->
+
+      <article class="car-card reveal" data-category="suv">
+
+        <div class="car-image">
+
+          <img
+            src="https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=1200&q=85"
+            alt="Range Rover"
+          >
+
+          <button
+            class="favorite"
+            onclick="toggleFavorite(this)"
+          >
+            ♡
+          </button>
+
+        </div>
+
+        <div class="car-content">
+
+          <div class="car-top">
+
+            <div>
+              <div class="car-brand">Land Rover</div>
+              <div class="car-name">Range Rover</div>
+            </div>
+
+            <div class="car-price">$114K</div>
+
+          </div>
+
+          <div class="car-specs">
+
+            <div class="spec">
+              <strong>4.4L</strong>
+              <span>Engine</span>
+            </div>
+
+            <div class="spec">
+              <strong>523 HP</strong>
+              <span>Power</span>
+            </div>
+
+            <div class="spec">
+              <strong>4.6s</strong>
+              <span>0–100</span>
+            </div>
+
+          </div>
+
+          <div class="car-actions">
+
+            <button
+              class="btn btn-primary"
+              onclick="openCar(
+                'Range Rover',
+                'Land Rover',
+                '$114,000',
+                'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=1800&q=90',
+                '4.4L V8',
+                '523 HP',
+                '4.6 сек',
+                '250 км/год'
+              )"
+            >
+              Детальніше →
+            </button>
+
+            <button
+              class="icon-btn"
+              onclick="showToast('Range Rover додано до порівняння')"
+            >
+              ⇄
+            </button>
+
+          </div>
+
+        </div>
+
+      </article>
+
+
+      <!-- CAR 5 -->
+
+      <article class="car-card reveal" data-category="sport">
+
+        <div class="car-image">
+
+          <img
+            src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=1200&q=85"
+            alt="Lamborghini"
+          >
+
+          <span class="car-badge">Supercar</span>
+
+          <button
+            class="favorite"
+            onclick="toggleFavorite(this)"
+          >
+            ♡
+          </button>
+
+        </div>
+
+        <div class="car-content">
+
+          <div class="car-top">
+
+            <div>
+              <div class="car-brand">Lamborghini</div>
+              <div class="car-name">Huracán EVO</div>
+            </div>
+
+            <div class="car-price">$248K</div>
+
+          </div>
+
+          <div class="car-specs">
+
+            <div class="spec">
+              <strong>5.2L</strong>
+              <span>V10</span>
+            </div>
+
+            <div class="spec">
+              <strong>631 HP</strong>
+              <span>Power</span>
+            </div>
+
+            <div class="spec">
+              <strong>2.9s</strong>
+              <span>0–100</span>
+            </div>
+
+          </div>
+
+          <div class="car-actions">
+
+            <button
+              class="btn btn-primary"
+              onclick="openCar(
+                'Lamborghini Huracán EVO',
+                'Lamborghini',
+                '$248,000',
+                'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=1800&q=90',
+                '5.2L V10',
+                '631 HP',
+                '2.9 сек',
+                '325 км/год'
+              )"
+            >
+              Детальніше →
+            </button>
+
+            <button
+              class="icon-btn"
+              onclick="showToast('Lamborghini додано до порівняння')"
+            >
+              ⇄
+            </button>
+
+          </div>
+
+        </div>
+
+      </article>
+
+
+      <!-- CAR 6 -->
+
+      <article class="car-card reveal" data-category="electric">
+
+        <div class="car-image">
+
+          <img
+            src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=1200&q=85"
+            alt="Mercedes EQ"
+          >
+
+          <span class="car-badge">Premium EV</span>
+
+          <button
+            class="favorite"
+            onclick="toggleFavorite(this)"
+          >
+            ♡
+          </button>
+
+        </div>
+
+        <div class="car-content">
+
+          <div class="car-top">
+
+            <div>
+              <div class="car-brand">Mercedes-Benz</div>
+              <div class="car-name">EQS</div>
+            </div>
+
+            <div class="car-price">$108K</div>
+
+          </div>
+
+          <div class="car-specs">
+
+            <div class="spec">
+              <strong>107 kWh</strong>
+              <span>Battery</span>
+            </div>
+
+            <div class="spec">
+              <strong>536 HP</strong>
+              <span>Power</span>
+            </div>
+
+            <div class="spec">
+              <strong>3.4s</strong>
+              <span>0–100</span>
+            </div>
+
+          </div>
+
+          <div class="car-actions">
+
+            <button
+              class="btn btn-primary"
+              onclick="openCar(
+                'Mercedes-Benz EQS',
+                'Mercedes-Benz',
+                '$108,000',
+                'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=1800&q=90',
+                '107 kWh',
+                '536 HP',
+                '3.4 сек',
+                '250 км/год'
+              )"
+            >
+              Детальніше →
+            </button>
+
+            <button
+              class="icon-btn"
+              onclick="showToast('Mercedes EQS додано до порівняння')"
+            >
+              ⇄
+            </button>
+
+          </div>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     FEATURED CAR
+========================================================= -->
+
+<section class="section" id="featured">
+
+  <div class="container">
+
+    <div class="featured-wrap reveal">
+
+      <div class="featured-image">
+
+        <img
+          src="https://images.unsplash.com/photo-1504215680853-026ed2a45def?auto=format&fit=crop&w=1800&q=85"
+          alt="Porsche GT3"
+        >
+
+      </div>
+
+      <div class="featured-content">
+
+        <div class="eyebrow">Editor's review</div>
+
+        <h2>
+          Porsche<br>
+          911 GT3.
+        </h2>
+
+        <p>
+          Автомобіль, створений для тих, хто хоче
+          відчувати дорогу на кожному кілометрі.
+          Атмосферний двигун, точне керування
+          та характер справжнього спортивного автомобіля.
+        </p>
+
+        <div class="feature-list">
+
+          <div class="feature-item">
+            Потужність
+            <span>502 HP</span>
+          </div>
+
+          <div class="feature-item">
+            0–100 км/год
+            <span>3.4 сек</span>
+          </div>
+
+          <div class="feature-item">
+            Максимальна швидкість
+            <span>318 км/год</span>
+          </div>
+
+          <div class="feature-item">
+            Привід
+            <span>RWD</span>
+          </div>
+
+        </div>
+
+        <button
+          class="btn btn-primary"
+          onclick="showToast('Повний огляд Porsche 911 GT3 відкрито')"
+        >
+          Читати повний огляд →
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     CONFIGURATOR
+========================================================= -->
+
+<section class="section configurator" id="configurator">
+
+  <div class="container">
+
+    <div class="section-header reveal">
+
+      <div>
+
+        <div class="eyebrow">Configurator</div>
+
+        <h2 class="section-title">
+          Створи автомобіль,<br>
+          який говорить про тебе.
+        </h2>
+
+      </div>
+
+      <p class="section-description">
+        Обери колір, колеса та комплектацію.
+        Ціна змінюється автоматично.
+      </p>
+
+    </div>
+
+
+    <div class="configurator-grid">
+
+      <div class="config-preview">
+
+        <div class="config-title">
+          <span>Ваш автомобіль</span>
+          <h3>Velocity X</h3>
+        </div>
+
+        <div class="config-price">
+
+          <small>Орієнтовна ціна</small>
+
+          <strong id="configPrice">$74,900</strong>
+
+        </div>
+
+      </div>
+
+
+      <div class="config-panel">
+
+        <h3>Конфігурація</h3>
+
+
+        <div class="config-option">
+
+          <label>Колір кузова</label>
+
+          <div class="color-options">
+
+            <button
+              class="color black active"
+              onclick="changeColor(this, 0)"
+            ></button>
+
+            <button
+              class="color white"
+              onclick="changeColor(this, 1000)"
+            ></button>
+
+            <button
+              class="color red"
+              onclick="changeColor(this, 1800)"
+            ></button>
+
+            <button
+              class="color blue"
+              onclick="changeColor(this, 2200)"
+            ></button>
+
+            <button
+              class="color silver"
+              onclick="changeColor(this, 1500)"
+            ></button>
+
+          </div>
+
+        </div>
+
+
+        <div class="config-option">
+
+          <label>Диски</label>
+
+          <div class="option-grid">
+
+            <button class="option active" onclick="selectOption(this, 0)">
+              19"
+            </button>
+
+            <button class="option" onclick="selectOption(this, 2500)">
+              20"
+            </button>
+
+            <button class="option" onclick="selectOption(this, 4800)">
+              21"
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="config-option">
+
+          <label>Комплектація</label>
+
+          <div class="option-grid">
+
+            <button class="option active" onclick="selectOption(this, 0)">
+              Base
+            </button>
+
+            <button class="option" onclick="selectOption(this, 8500)">
+              Sport
+            </button>
+
+            <button class="option" onclick="selectOption(this, 16000)">
+              Ultimate
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="config-option">
+
+          <label>Салон</label>
+
+          <div class="option-grid">
+
+            <button class="option active" onclick="selectOption(this, 0)">
+              Black
+            </button>
+
+            <button class="option" onclick="selectOption(this, 3500)">
+              Cream
+            </button>
+
+            <button class="option" onclick="selectOption(this, 5000)">
+              Red
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <button
+          class="btn btn-primary btn-large"
+          style="width:100%; margin-top:10px;"
+          onclick="showToast('Конфігурацію збережено!')"
+        >
+          Зберегти конфігурацію →
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     COMPARISON
+========================================================= -->
+
+<section class="section" id="compare">
+
+  <div class="container">
+
+    <div class="section-header reveal">
+
+      <div>
+
+        <div class="eyebrow">Compare</div>
+
+        <h2 class="section-title">
+          Три автомобілі.<br>
+          Один вибір.
+        </h2>
+
+      </div>
+
+      <p class="section-description">
+        Порівняй ключові характеристики
+        популярних моделей в одному місці.
+      </p>
+
+    </div>
+
+
+    <div class="compare-box reveal">
+
+      <div class="compare-header">
+
+        <div></div>
+
+        <div class="compare-car">
+
+          <img
+            src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=700&q=80"
+            alt="Porsche"
+          >
+
+          <h4>Porsche 911</h4>
+
+        </div>
+
+        <div class="compare-car">
+
+          <img
+            src="https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=700&q=80"
+            alt="BMW"
+          >
+
+          <h4>BMW M4</h4>
+
+        </div>
+
+        <div class="compare-car">
+
+          <img
+            src="https://images.unsplash.com/photo-1560958089-b8a1929cea89?auto=format&fit=crop&w=700&q=80"
+            alt="Tesla"
+          >
+
+          <h4>Tesla Model S</h4>
+
+        </div>
+
+      </div>
+
+
+      <div class="compare-row">
+
+        <div>Ціна</div>
+        <div>$128,000</div>
+        <div>$86,000</div>
+        <div>$89,000</div>
+
+      </div>
+
+
+      <div class="compare-row">
+
+        <div>Потужність</div>
+        <div>443 HP</div>
+        <div>503 HP</div>
+        <div>670 HP</div>
+
+      </div>
+
+
+      <div class="compare-row">
+
+        <div>0–100 км/год</div>
+        <div>3.7 сек</div>
+        <div>3.8 сек</div>
+        <div>3.2 сек</div>
+
+      </div>
+
+
+      <div class="compare-row">
+
+        <div>Тип</div>
+        <div>Petrol</div>
+        <div>Petrol</div>
+        <div>Electric</div>
+
+      </div>
+
+
+      <div class="compare-row">
+
+        <div>Макс. швидкість</div>
+        <div>293 км/год</div>
+        <div>290 км/год</div>
+        <div>322 км/год</div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     NUMBERS
+========================================================= -->
+
+<section class="numbers">
+
+  <div class="container">
+
+    <div class="numbers-grid">
+
+      <div class="number-item reveal">
+        <strong>240+</strong>
+        <span>Автомобілів</span>
+      </div>
+
+      <div class="number-item reveal">
+        <strong>48</strong>
+        <span>Брендів</span>
+      </div>
+
+      <div class="number-item reveal">
+        <strong>12K+</strong>
+        <span>Оглядів</span>
+      </div>
+
+      <div class="number-item reveal">
+        <strong>98%</strong>
+        <span>Задоволених читачів</span>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     NEWS
+========================================================= -->
+
+<section class="section" id="news">
+
+  <div class="container">
+
+    <div class="section-header reveal">
+
+      <div>
+
+        <div class="eyebrow">Latest stories</div>
+
+        <h2 class="section-title">
+          Автомобільний<br>
+          світ не стоїть.
+        </h2>
+
+      </div>
+
+      <p class="section-description">
+        Новинки, технології, тести та історії,
+        які формують автомобільне майбутнє.
+      </p>
+
+    </div>
+
+
+    <div class="news-grid">
+
+      <article class="news-card large reveal">
+
+        <div class="news-image">
+
+          <img
+            src="https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&w=1600&q=85"
+            alt="Автомобільна технологія"
+          >
+
+        </div>
+
+        <div class="news-content">
+
+          <div class="news-meta">
+            <span>Technology</span>
+            <span>06.10.2026</span>
+          </div>
+
+          <h3>
+            Як технології змінюють автомобілі
+            нового покоління
+          </h3>
+
+          <p>
+            Від штучного інтелекту до нових систем
+            безпеки — автомобілі стають складнішими,
+            розумнішими та персоналізованішими.
+          </p>
+
+        </div>
+
+      </article>
+
+
+      <article class="news-card reveal">
+
+        <div class="news-image">
+
+          <img
+            src="https://images.unsplash.com/photo-1614200187524-dc4b892acf16?auto=format&fit=crop&w=1000&q=85"
+            alt="Електромобіль"
+          >
+
+        </div>
+
+        <div class="news-content">
+
+          <div class="news-meta">
+            <span>Electric</span>
+            <span>05.10</span>
+          </div>
+
+          <h3>
+            Ера швидких електромобілів
+          </h3>
+
+          <p>
+            Чому електрокари більше не асоціюються
+            лише з економічністю.
+          </p>
+
+        </div>
+
+      </article>
+
+
+      <article class="news-card reveal">
+
+        <div class="news-image">
+
+          <img
+            src="https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=1000&q=85"
+            alt="Спортивний автомобіль"
+          >
+
+        </div>
+
+        <div class="news-content">
+
+          <div class="news-meta">
+            <span>Culture</span>
+            <span>03.10</span>
+          </div>
+
+          <h3>
+            Що робить автомобіль легендою?
+          </h3>
+
+          <p>
+            Дизайн, звук двигуна чи історія?
+            Розбираємо формулу культового авто.
+          </p>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     REVIEWS
+========================================================= -->
+
+<section class="section" style="background:#0b0d10;">
+
+  <div class="container">
+
+    <div class="section-header reveal">
+
+      <div>
+
+        <div class="eyebrow">Community</div>
+
+        <h2 class="section-title">
+          Що говорять<br>
+          наші читачі.
+        </h2>
+
+      </div>
+
+      <p class="section-description">
+        VELOCITY створений для людей,
+        які не просто їздять на автомобілях —
+        вони ними живуть.
+      </p>
+
+    </div>
+
+
+    <div class="reviews-grid">
+
+      <div class="review reveal">
+
+        <div class="stars">★★★★★</div>
+
+        <p>
+          «Дуже крутий сайт. Особливо сподобався
+          конфігуратор — нарешті можна нормально
+          порівняти комплектації без десятка вкладок.»
+        </p>
+
+        <div class="review-user">
+
+          <img
+            class="avatar"
+            src="https://i.pravatar.cc/100?img=12"
+            alt="Олександр"
+          >
+
+          <div>
+            <strong>Олександр</strong>
+            <span>Автолюбитель</span>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="review reveal">
+
+        <div class="stars">★★★★★</div>
+
+        <p>
+          «Дизайн виглядає сучасно, інформація
+          подана дуже зрозуміло. Я знайшов тут
+          кілька моделей, про які раніше навіть
+          не знав.»
+        </p>
+
+        <div class="review-user">
+
+          <img
+            class="avatar"
+            src="https://i.pravatar.cc/100?img=32"
+            alt="Марія"
+          >
+
+          <div>
+            <strong>Марія</strong>
+            <span>Читач VELOCITY</span>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="review reveal">
+
+        <div class="stars">★★★★★</div>
+
+        <p>
+          «Порівняння Porsche, BMW і Tesla
+          реально допомогло визначитися.
+          Зручний і дуже красивий автомобільний портал.»
+        </p>
+
+        <div class="review-user">
+
+          <img
+            class="avatar"
+            src="https://i.pravatar.cc/100?img=56"
+            alt="Дмитро"
+          >
+
+          <div>
+            <strong>Дмитро</strong>
+            <span>Car enthusiast</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     FAQ
+========================================================= -->
+
+<section class="section">
+
+  <div class="container">
+
+    <div class="section-header reveal">
+
+      <div>
+
+        <div class="eyebrow">FAQ</div>
+
+        <h2 class="section-title">
+          Є питання?
+        </h2>
+
+      </div>
+
+      <p class="section-description">
+        Відповіді на найпопулярніші питання
+        про автомобілі та наш сервіс.
+      </p>
+
+    </div>
+
+
+    <div class="faq-wrap">
+
+      <div class="faq">
+
+        <div class="faq-item">
+
+          <button class="faq-question">
+            Як вибрати автомобіль?
+            <span class="faq-icon">+</span>
+          </button>
+
+          <div class="faq-answer">
+            <p>
+              Почни з визначення бюджету, типу кузова,
+              сценарію використання та бажаної потужності.
+              Потім порівняй кілька моделей за характеристиками
+              та вартістю обслуговування.
+            </p>
+          </div>
+
+        </div>
+
+
+        <div class="faq-item">
+
+          <button class="faq-question">
+            Чи можна порівнювати автомобілі?
+            <span class="faq-icon">+</span>
+          </button>
+
+          <div class="faq-answer">
+            <p>
+              Так. На сторінці представлене порівняння
+              основних характеристик автомобілів.
+              У майбутньому його можна розширити
+              до повноцінного динамічного сервісу.
+            </p>
+          </div>
+
+        </div>
+
+
+        <div class="faq-item">
+
+          <button class="faq-question">
+            Що краще: бензин чи електромобіль?
+            <span class="faq-icon">+</span>
+          </button>
+
+          <div class="faq-answer">
+            <p>
+              Все залежить від ваших умов використання.
+              Електромобілі чудово підходять для міста
+              та щоденних поїздок, а бензинові автомобілі
+              можуть бути зручнішими для далеких подорожей.
+            </p>
+          </div>
+
+        </div>
+
+
+        <div class="faq-item">
+
+          <button class="faq-question">
+            Чи можна записатися на тест-драйв?
+            <span class="faq-icon">+</span>
+          </button>
+
+          <div class="faq-answer">
+            <p>
+              Так. Заповніть форму нижче та вкажіть
+              автомобіль, який вас цікавить.
+              Після цього можна зв'язатися з вами
+              для узгодження деталей.
+            </p>
+          </div>
+
+        </div>
+
+
+        <div class="faq-item">
+
+          <button class="faq-question">
+            Як працює конфігуратор?
+            <span class="faq-icon">+</span>
+          </button>
+
+          <div class="faq-answer">
+            <p>
+              Обирайте колір, колеса, комплектацію
+              та салон. Кожна опція додає відповідну
+              суму до базової ціни автомобіля.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     CTA
+========================================================= -->
+
+<section class="cta">
+
+  <div class="container">
+
+    <div class="cta-box reveal">
+
+      <div class="cta-content">
+
+        <div class="eyebrow">Your next car</div>
+
+        <h2>
+          Готовий знайти
+          свій автомобіль?
+        </h2>
+
+        <p>
+          Досліджуй моделі, порівнюй характеристики
+          та зроби перший крок до автомобіля,
+          який справді хочеться водити.
+        </p>
+
+        <a href="#models" class="btn btn-primary btn-large">
+          Почати пошук →
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     CONTACT
+========================================================= -->
+
+<section class="section" id="contact">
+
+  <div class="container">
+
+    <div class="section-header reveal">
+
+      <div>
+
+        <div class="eyebrow">Contact</div>
+
+        <h2 class="section-title">
+          Давай поговоримо<br>
+          про автомобілі.
+        </h2>
+
+      </div>
+
+      <p class="section-description">
+        Маєш питання, хочеш тест-драйв або
+        потрібна допомога з вибором?
+        Напиши нам.
+      </p>
+
+    </div>
+
+
+    <div class="contact-grid">
+
+      <div class="contact-info reveal">
+
+        <h3>VELOCITY</h3>
+
+        <p>
+          Незалежний автомобільний простір,
+          створений для тих, хто любить
+          технології, дизайн і швидкість.
+        </p>
+
+
+        <div class="contact-item">
+          <span>Email</span>
+          <strong>hello@velocity.auto</strong>
+        </div>
+
+        <div class="contact-item">
+          <span>Телефон</span>
+          <strong>+380 00 000 00 00</strong>
+        </div>
+
+        <div class="contact-item">
+          <span>Години роботи</span>
+          <strong>Пн — Пт / 09:00 — 19:00</strong>
+        </div>
+
+      </div>
+
+
+      <div class="contact-form reveal">
+
+        <h3>Запис на тест-драйв</h3>
+
+        <form id="contactForm">
+
+          <div class="form-grid">
+
+            <div class="field">
+
+              <label>Ваше ім'я</label>
+
+              <input
+                type="text"
+                placeholder="Олександр"
+                required
+              >
+
+            </div>
+
+
+            <div class="field">
+
+              <label>Телефон</label>
+
+              <input
+                type="tel"
+                placeholder="+380..."
+                required
+              >
+
+            </div>
+
+
+            <div class="field">
+
+              <label>Автомобіль</label>
+
+              <select>
+
+                <option>Porsche 911</option>
+                <option>BMW M4</option>
+                <option>Tesla Model S</option>
+                <option>Range Rover</option>
+                <option>Lamborghini Huracán</option>
+                <option>Mercedes EQS</option>
+
+              </select>
+
+            </div>
+
+
+            <div class="field">
+
+              <label>Місто</label>
+
+              <input
+                type="text"
+                placeholder="Ваше місто"
+              >
+
+            </div>
+
+
+            <div class="field full">
+
+              <label>Повідомлення</label>
+
+              <textarea
+                placeholder="Напишіть, який автомобіль вас цікавить..."
+              ></textarea>
+
+            </div>
+
+          </div>
+
+
+          <button
+            class="btn btn-primary btn-large"
+            type="submit"
+          >
+            Надіслати заявку →
+          </button>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer>
+
+  <div class="container">
+
+    <div class="footer-top">
+
+      <div class="footer-brand">
+
+        <a href="#home" class="logo">
+          <span class="logo-mark"></span>
+          VELOCITY
+        </a>
+
+        <p>
+          Сучасний автомобільний портал
+          про машини, технології, дизайн
+          та майбутнє мобільності.
+        </p>
+
+      </div>
+
+
+      <div class="footer-col">
+
+        <h4>Навігація</h4>
+
+        <a href="#home">Головна</a>
+        <a href="#models">Автомобілі</a>
+        <a href="#compare">Порівняння</a>
+        <a href="#news">Новини</a>
+
+      </div>
+
+
+      <div class="footer-col">
+
+        <h4>Автомобілі</h4>
+
+        <a href="#models">Спортивні</a>
+        <a href="#models">Електричні</a>
+        <a href="#models">SUV</a>
+        <a href="#models">Luxury</a>
+
+      </div>
+
+
+      <div class="footer-col">
+
+        <h4>Інше</h4>
+
+        <a href="#configurator">Конфігуратор</a>
+        <a href="#contact">Тест-драйв</a>
+        <a href="#contact">Контакти</a>
+        <a href="#">Політика приватності</a>
+
+      </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+      <span>
+        © 2026 VELOCITY. All rights reserved.
+      </span>
+
+      <span>
+        Designed for people who love cars.
+      </span>
+
+    </div>
+
+  </div>
+
+</footer>
+
+
+<!-- =========================================================
+     CAR MODAL
+========================================================= -->
+
+<div class="modal" id="carModal">
+
+  <div class="modal-box">
+
+    <button
+      class="modal-close"
+      onclick="closeModal()"
+    >
+      ✕
+    </button>
+
+
+    <div class="modal-image">
+
+      <img id="modalImage" src="" alt="Автомобіль">
+
+    </div>
+
+
+    <div class="modal-body">
+
+      <div class="eyebrow" id="modalBrand">
+        Brand
+      </div>
+
+      <h2 id="modalTitle">
+        Car
+      </h2>
+
+      <p>
+        Детальна інформація про автомобіль,
+        його характеристики та ключові показники.
+        Вивчи модель та порівняй її з іншими
+        автомобілями у нашому каталозі.
+      </p>
+
+
+      <div class="modal-specs">
+
+        <div class="modal-spec">
+          <span>Двигун</span>
+          <strong id="modalEngine">—</strong>
+        </div>
+
+        <div class="modal-spec">
+          <span>Потужність</span>
+          <strong id="modalPower">—</strong>
+        </div>
+
+        <div class="modal-spec">
+          <span>0–100</span>
+          <strong id="modalAcceleration">—</strong>
+        </div>
+
+        <div class="modal-spec">
+          <span>Макс. швидкість</span>
+          <strong id="modalSpeed">—</strong>
+        </div>
+
+      </div>
+
+      <div style="margin-top:25px; display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;">
+
+        <strong
+          id="modalPrice"
+          style="font-size:28px;"
+        >
+          $0
+        </strong>
+
+        <button
+          class="btn btn-primary"
+          onclick="closeModal(); document.querySelector('#contact').scrollIntoView({behavior:'smooth'});"
+        >
+          Записатися на тест-драйв →
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================================================
+     TOAST
+========================================================= -->
+
+<div class="toast" id="toast"></div>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+  /* =========================
+     HEADER
+  ========================= */
+
+  const header = document.getElementById("header");
+
+  window.addEventListener("scroll", () => {
+
+    if (window.scrollY > 40) {
+      header.classList.add("scrolled");
+    } else {
+      header.classList.remove("scrolled");
+    }
+
+  });
+
+
+  /* =========================
+     MOBILE MENU
+  ========================= */
+
+  const menuBtn = document.getElementById("menuBtn");
+  const nav = document.getElementById("nav");
+
+  menuBtn.addEventListener("click", () => {
+
+    nav.classList.toggle("open");
+
+    menuBtn.textContent =
+      nav.classList.contains("open") ? "✕" : "☰";
+
+  });
+
+
+  document.querySelectorAll(".nav a").forEach(link => {
+
+    link.addEventListener("click", () => {
+
+      nav.classList.remove("open");
+      menuBtn.textContent = "☰";
+
+    });
+
+  });
+
+
+  /* =========================
+     REVEAL ANIMATIONS
+  ========================= */
+
+  const observer = new IntersectionObserver(
+    entries => {
+
+      entries.forEach(entry => {
+
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+        }
+
+      });
+
+    },
+    {
+      threshold: .1
+    }
+  );
+
+
+  document.querySelectorAll(".reveal").forEach(element => {
+    observer.observe(element);
+  });
+
+
+  /* =========================
+     TOAST
+  ========================= */
+
+  let toastTimer;
+
+  function showToast(message) {
+
+    const toast = document.getElementById("toast");
+
+    toast.textContent = message;
+
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(() => {
+
+      toast.classList.remove("show");
+
+    }, 2800);
+
+  }
+
+
+  /* =========================
+     FAVORITE
+  ========================= */
+
+  function toggleFavorite(button) {
+
+    button.classList.toggle("active");
+
+    if (button.classList.contains("active")) {
+
+      button.textContent = "♥";
+
+      showToast("Автомобіль додано до обраного");
+
+    } else {
+
+      button.textContent = "♡";
+
+      showToast("Автомобіль видалено з обраного");
+
+    }
+
+  }
+
+
+  /* =========================
+     FILTER
+  ========================= */
+
+  function filterCars(category, clickedButton) {
+
+    const cards =
+      document.querySelectorAll(".car-card");
+
+    const buttons =
+      document.querySelectorAll(".filter-btn");
+
+
+    if (clickedButton) {
+
+      buttons.forEach(button => {
+        button.classList.remove("active");
+      });
+
+      clickedButton.classList.add("active");
+
+    }
+
+
+    cards.forEach(card => {
+
+      const cardCategory =
+        card.dataset.category;
+
+      if (
+        category === "all" ||
+        cardCategory === category
+      ) {
+
+        card.style.display = "block";
+
+        setTimeout(() => {
+          card.style.opacity = "1";
+          card.style.transform = "translateY(0)";
+        }, 10);
+
+      } else {
+
+        card.style.opacity = "0";
+        card.style.transform = "translateY(15px)";
+
+        setTimeout(() => {
+          card.style.display = "none";
+        }, 250);
+
+      }
+
+    });
+
+
+    document
+      .getElementById("models")
+      .scrollIntoView({
+        behavior: "smooth"
+      });
+
+  }
+
+
+  /* =========================
+     CAR MODAL
+  ========================= */
+
+  function openCar(
+    title,
+    brand,
+    price,
+    image,
+    engine,
+    power,
+    acceleration,
+    speed
+  ) {
+
+    document.getElementById("modalTitle").textContent = title;
+    document.getElementById("modalBrand").textContent = brand;
+    document.getElementById("modalPrice").textContent = price;
+    document.getElementById("modalImage").src = image;
+
+    document.getElementById("modalEngine").textContent = engine;
+    document.getElementById("modalPower").textContent = power;
+    document.getElementById("modalAcceleration").textContent = acceleration;
+    document.getElementById("modalSpeed").textContent = speed;
+
+    document
+      .getElementById("carModal")
+      .classList.add("show");
+
+    document.body.classList.add("no-scroll");
+
+  }
+
+
+  function closeModal() {
+
+    document
+      .getElementById("carModal")
+      .classList.remove("show");
+
+    document.body.classList.remove("no-scroll");
+
+  }
+
+
+  document
+    .getElementById("carModal")
+    .addEventListener("click", function(e) {
+
+      if (e.target === this) {
+        closeModal();
+      }
+
+    });
+
+
+  document.addEventListener("keydown", e => {
+
+    if (e.key === "Escape") {
+      closeModal();
+    }
+
+  });
+
+
+  /* =========================
+     CONFIGURATOR
+  ========================= */
+
+  let configPrice = 74900;
+
+
+  function formatPrice(price) {
+
+    return "$" + price.toLocaleString("en-US");
+
+  }
+
+
+  function updateConfigPrice(amount) {
+
+    configPrice += amount;
+
+    document.getElementById("configPrice").textContent =
+      formatPrice(configPrice);
+
+  }
+
+
+  function changeColor(button, price) {
+
+    button
+      .parentElement
+      .querySelectorAll(".color")
+      .forEach(color => {
+
+        color.classList.remove("active");
+
+      });
+
+    button.classList.add("active");
+
+    updateConfigPrice(price);
+
+  }
+
+
+  function selectOption(button, price) {
+
+    button
+      .parentElement
+      .querySelectorAll(".option")
+      .forEach(option => {
+
+        option.classList.remove("active");
+
+      });
+
+    button.classList.add("active");
+
+    updateConfigPrice(price);
+
+  }
+
+
+  /* =========================
+     FAQ
+  ========================= */
+
+  document
+    .querySelectorAll(".faq-question")
+    .forEach(question => {
+
+      question.addEventListener("click", () => {
+
+        const item =
+          question.parentElement;
+
+        const currentlyOpen =
+          document.querySelector(".faq-item.open");
+
+        if (
+          currentlyOpen &&
+          currentlyOpen !== item
+        ) {
+
+          currentlyOpen.classList.remove("open");
+
+        }
+
+        item.classList.toggle("open");
+
+      });
+
+    });
+
+
+  /* =========================
+     CONTACT FORM
+  ========================= */
+
+  document
+    .getElementById("contactForm")
+    .addEventListener("submit", function(e) {
+
+      e.preventDefault();
+
+      showToast(
+        "Дякуємо! Заявку успішно відправлено."
+      );
+
+      this.reset();
+
+    });
+
+
+  /* =========================
+     SMOOTH LINKS
+  ========================= */
+
+  document
+    .querySelectorAll('a[href^="#"]')
+    .forEach(link => {
+
+      link.addEventListener("click", function(e) {
+
+        const target =
+          document.querySelector(this.getAttribute("href"));
+
+        if (target) {
+
+          e.preventDefault();
+
+          target.scrollIntoView({
+            behavior: "smooth"
+          });
+
+        }
+
+      });
+
+    });
+
+</script>
+
+</body>
+</html>
